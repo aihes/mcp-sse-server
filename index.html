@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Client Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, button {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px 15px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>MCP Client Demo</h1>
+    
+    <div class="container">
+        <div class="card">
+            <h2>Calculator Tool</h2>
+            <div class="form-group">
+                <label for="num1">Number 1:</label>
+                <input type="number" id="num1" value="5">
+            </div>
+            <div class="form-group">
+                <label for="num2">Number 2:</label>
+                <input type="number" id="num2" value="3">
+            </div>
+            <button id="calculate">Calculate</button>
+            <div class="form-group">
+                <label>Result:</label>
+                <pre id="result">Click Calculate to see result</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Greeting Resource</h2>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" value="Alice">
+            </div>
+            <button id="greet">Get Greeting</button>
+            <div class="form-group">
+                <label>Greeting:</label>
+                <pre id="greeting">Click Get Greeting to see result</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Server Information</h2>
+            <button id="getInfo">Get Server Info</button>
+            <div class="form-group">
+                <label>Server Info:</label>
+                <pre id="serverInfo">Click Get Server Info to see result</pre>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // This is a simplified demo that would connect to a real MCP server
+        // In a real application, you would use the MCP SDK to connect to the server
+        
+        document.getElementById('calculate').addEventListener('click', async () => {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            
+            try {
+                // Simulate calling the MCP server
+                const result = num1 + num2;
+                document.getElementById('result').textContent = `${num1} + ${num2} = ${result}`;
+            } catch (error) {
+                document.getElementById('result').textContent = `Error: ${error.message}`;
+            }
+        });
+
+        document.getElementById('greet').addEventListener('click', async () => {
+            const name = document.getElementById('name').value;
+            
+            try {
+                // Simulate getting a resource from the MCP server
+                const greeting = `Hello, ${name}!`;
+                document.getElementById('greeting').textContent = greeting;
+            } catch (error) {
+                document.getElementById('greeting').textContent = `Error: ${error.message}`;
+            }
+        });
+
+        document.getElementById('getInfo').addEventListener('click', async () => {
+            try {
+                // Simulate getting server info
+                const serverInfo = {
+                    name: "Demo",
+                    version: "1.0.0",
+                    tools: ["add"],
+                    resources: ["greeting"]
+                };
+                document.getElementById('serverInfo').textContent = JSON.stringify(serverInfo, null, 2);
+            } catch (error) {
+                document.getElementById('serverInfo').textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
