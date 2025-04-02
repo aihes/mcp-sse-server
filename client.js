@@ -44,6 +44,18 @@ async function main() {
     });
     console.log("Greeting:", greeting.contents[0].text);
 
+
+    const prompts = await client.listPrompts();
+    console.log("Available prompts:", prompts);
+
+    // Call the introduce prompt
+    const introduce = await client.getPrompt({
+      name: "introduce",
+      arguments: { name: "Alice", role: "AI Assistant" }
+    });
+    console.log("Introduce:", introduce.content[0].text);
+
+
   } catch (error) {
     console.error("Error:", error);
   } finally {
