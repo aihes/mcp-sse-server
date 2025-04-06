@@ -79,6 +79,49 @@ server.resource(
   })
 );
 
+// Add a simple prompt without arguments
+server.prompt("hello", async () => ({
+  messages: [],  // Required by the protocol
+  content: [{ type: "text", text: "Hello! How can I help you today?" }]
+}));
+
+// Add a prompt with description
+server.prompt("welcome", 
+  "A friendly welcome message", 
+  async () => ({
+    messages: [],  // Required by the protocol
+    content: [{ type: "text", text: "Welcome to the MCP Demo server!" }]
+  })
+);
+
+// Add a prompt with arguments
+server.prompt("greet",
+  { name: z.string() },
+  async ({ name }) => ({
+    messages: [],  // Required by the protocol
+    content: [{ type: "text", text: `Hello, ${name}! Nice to meet you.` }]
+  })
+);
+
+// Add a prompt with description and arguments
+server.prompt("introduce",
+  "Introduces the AI assistant with custom details",
+  { 
+    name: z.string().describe("Your name"),
+    role: z.string().optional().describe("Your role or profession")
+  },
+  async ({ name, role }) => {
+    const roleText = role ? ` As a ${role}, I` : " I";
+    return {
+      messages: [],  // Required by the protocol
+      content: [{ 
+        type: "text", 
+        text: `Nice to meet you, ${name}!${roleText} am here to assist you with any questions or tasks you might have.` 
+      }]
+    };
+  }
+);
+
 // Create Express app
 const app = express();
 const PORT = 3001;
