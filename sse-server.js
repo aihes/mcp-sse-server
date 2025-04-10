@@ -1,8 +1,25 @@
+// Load environment variables from .env file
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { z } from "zod";
 import cors from "cors";
+import puppeteer from "puppeteer";
+import fs from "fs-extra";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
+
+// Configuration for the HTML-to-image feature
+const config = {
+  imageDomainPrefix: process.env.IMAGE_DOMAIN_PREFIX || `http://localhost:${process.env.PORT || 3001}`,
+  imageStoragePath: path.join(process.cwd(), 'public/images')
+};
+
+// Ensure the image storage directory exists
+fs.ensureDirSync(config.imageStoragePath);
 
 // Create an MCP server
 const server = new McpServer({
@@ -122,6 +139,114 @@ server.prompt("introduce",
   }
 );
 
+// Add HTML-to-image conversion tool
+server.tool(
+  "htmlToImage",
+  "Converts HTML/SVG content to an image, saves it locally, and returns the image URL",
+  {
+    htmlContent: z.string().describe("HTML or SVG content to convert to an image"),
+    width: z.number().optional().describe("Width of the image in pixels (optional, will auto-adjust if not specified)"),
+    height: z.number().optional().describe("Height of the image in pixels (optional, will auto-adjust if not specified)"),
+    format: z.enum(["png", "jpeg", "webp"]).optional().default("png").describe("Image format")
+  },
+  async ({ htmlContent, width, height, format }) => {
+    try {
+      // Generate a unique filename
+      const filename = `${uuidv4()}.${format}`;
+      const outputPath = path.join(config.imageStoragePath, filename);
+      
+      // Launch a headless browser
+      const browser = await puppeteer.launch({
+        headless: 'new',
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+      
+      try {
+        const page = await browser.newPage();
+        
+        // Set viewport size if specified, otherwise use a default initial size
+        await page.setViewport({ 
+          width: width || 1200, 
+          height: height || 800 
+        });
+        
+        // Set the HTML content
+        await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
+        
+        // If width or height is not specified, auto-adjust based on content
+        if (!width || !height) {
+          // Get the dimensions of the content
+          const dimensions = await page.evaluate(() => {
+            // For SVG content
+            const svg = document.querySelector('svg');
+            if (svg) {
+              const rect = svg.getBoundingClientRect();
+              return {
+                width: Math.ceil(rect.width),
+                height: Math.ceil(rect.height)
+              };
+            }
+            
+            // For HTML content, get the body or document dimensions
+            return {
+              width: Math.max(
+                document.body.scrollWidth,
+                document.documentElement.scrollWidth,
+                document.body.offsetWidth,
+                document.documentElement.offsetWidth,
+                document.body.clientWidth,
+                document.documentElement.clientWidth
+              ),
+              height: Math.max(
+                document.body.scrollHeight,
+                document.documentElement.scrollHeight,
+                document.body.offsetHeight,
+                document.documentElement.offsetHeight,
+                document.body.clientHeight,
+                document.documentElement.clientHeight
+              )
+            };
+          });
+          
+          // Apply the dimensions with some padding
+          await page.setViewport({
+            width: width || dimensions.width,
+            height: height || dimensions.height
+          });
+        }
+        
+        // Take a screenshot
+        await page.screenshot({
+          path: outputPath,
+          type: format,
+          fullPage: !width || !height // Use fullPage only when auto-adjusting
+        });
+        
+        // Generate the URL for accessing the image
+        const imageUrl = `${config.imageDomainPrefix}/images/${filename}`;
+        
+        return {
+          content: [{ 
+            type: "text", 
+            text: `Image created successfully. You can access it at: ${imageUrl}` 
+          }],
+          imageUrl // Include the URL in the response for programmatic access
+        };
+      } finally {
+        await browser.close();
+      }
+    } catch (error) {
+      console.error('Error converting HTML to image:', error);
+      return {
+        content: [{ 
+          type: "text", 
+          text: `Error converting HTML to image: ${error.message}` 
+        }]
+      };
+    }
+  }
+);
+
 // Create Express app
 const app = express();
 const PORT = 3001;
@@ -189,8 +314,8 @@ app.post("/messages", express.json({limit: '10mb'}), async (req, res) => {
   }
 });
 
-// Serve static files (optional, uncomment if needed)
-// app.use(express.static('public'));
+// Serve static files from the public directory
+app.use(express.static('public'));
 
 // Start the server
 app.listen(PORT, () => {
