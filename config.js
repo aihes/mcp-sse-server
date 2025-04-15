@@ -12,7 +12,8 @@ export default {
   // MCP endpoint configuration
   mcp: {
     endpoint: '/mcp', // MCP endpoint path
-    messagesPath: '/messages' // Messages endpoint path
+    messagesPath: '/messages', // Messages endpoint path
+    serviceUrl: process.env.MCP_SERVICE_URL || 'https://mcpdev.xyz/mcp' // Complete MCP service URL
   },
 
   // Image service configuration

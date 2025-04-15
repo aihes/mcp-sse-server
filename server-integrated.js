@@ -463,7 +463,8 @@ app.get('/api/config', (_, res) => {
       port: config.server.port
     },
     mcp: {
-      endpoint: config.mcp.endpoint
+      endpoint: config.mcp.endpoint,
+      serviceUrl: config.mcp.serviceUrl
     }
   };
 

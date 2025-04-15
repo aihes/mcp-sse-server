@@ -365,26 +365,28 @@
                 // Update MCP endpoint URL
                 const mcpEndpointUrl = document.getElementById('mcp-endpoint-url');
                 if (mcpEndpointUrl) {
-                    const host = config.server?.host || window.location.hostname;
-                    const port = config.server?.port || window.location.port;
-                    const endpoint = config.mcp?.endpoint || '/mcp';
+                    // Use the serviceUrl directly if available
+                    if (config.mcp?.serviceUrl) {
+                        mcpEndpointUrl.textContent = config.mcp.serviceUrl;
+                    } else {
+                        // Fallback to constructing the URL from components
+                        const host = config.server?.host || window.location.hostname;
+                        const port = config.server?.port || window.location.port;
+                        const endpoint = config.mcp?.endpoint || '/mcp';
 
-                    // Construct the full URL
-                    const fullUrl = `http://${host}${port ? ':' + port : ''}${endpoint}`;
-                    mcpEndpointUrl.textContent = fullUrl;
+                        // Construct the full URL
+                        const fullUrl = `http://${host}${port ? ':' + port : ''}${endpoint}`;
+                        mcpEndpointUrl.textContent = fullUrl;
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching server configuration:', error);
 
-                // Fallback to using current location
+                // Fallback to using current location or hardcoded value
                 const mcpEndpointUrl = document.getElementById('mcp-endpoint-url');
                 if (mcpEndpointUrl) {
-                    const host = window.location.hostname;
-                    const port = window.location.port;
-
-                    // Construct the full URL
-                    const fullUrl = `http://${host}${port ? ':' + port : ''}/mcp`;
-                    mcpEndpointUrl.textContent = fullUrl;
+                    // Use hardcoded value as ultimate fallback
+                    mcpEndpointUrl.textContent = 'http://mcpdev.xyz:3001/mcp';
                 }
             }
         });
