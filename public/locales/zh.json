@@ -1,0 +1,81 @@
+{
+  "site": {
+    "title": "HTML转图片SSE服务",
+    "copyright": "© 2023 HTML转图片服务。保留所有权利。"
+  },
+  "home": {
+    "header": {
+      "title": "HTML转图片转换服务",
+      "subtitle": "使用我们的SSE驱动服务将您的HTML内容转换为高质量图片"
+    },
+    "features": {
+      "integration": {
+        "title": "简单集成",
+        "description": "我们的服务使用服务器发送事件(SSE)进行实时通信，使其易于与您现有的应用程序集成。"
+      },
+      "quality": {
+        "title": "高质量图片",
+        "description": "将任何HTML或SVG内容转换为PNG、JPEG或WebP图片，并可自定义尺寸和质量设置。"
+      },
+      "free": {
+        "title": "免费使用",
+        "description": "我们的服务目前免费使用。如果您觉得它有价值，请考虑通过小额捐赠支持该项目。"
+      }
+    },
+    "tryDemo": {
+      "title": "试用我们的演示",
+      "description": "体验HTML转图片转换服务，使用我们的交互式演示。几秒钟内从您的HTML内容创建精美图片。",
+      "button": "试用演示",
+      "feature1": {
+        "title": "实时预览",
+        "description": "实时查看您的HTML渲染为图片"
+      },
+      "feature2": {
+        "title": "可自定义",
+        "description": "根据您的需求调整尺寸和格式"
+      },
+      "feature3": {
+        "title": "编辑HTML",
+        "description": "直接在编辑器中修改HTML内容"
+      }
+    },
+    "apiInfo": {
+      "title": "API信息",
+      "description": "使用我们的MCP服务以编程方式将HTML转换为图像。",
+      "mcpEndpoint": "MCP服务端点：",
+      "apiDocs": "API文档",
+      "viewDocs": "查看文档"
+    },
+    "support": {
+      "title": "支持本项目",
+      "description": "本服务目前免费使用。如果您觉得它对您的项目有价值，请考虑请我喝杯咖啡！",
+      "supportMessage": "您的支持有助于保持此服务的运行并实现未来的改进。",
+      "alipay": "支付宝",
+      "wechat": "微信支付"
+    }
+  },
+  "demo": {
+    "header": {
+      "title": "HTML转图片转换演示"
+    },
+    "editor": {
+      "title": "HTML编辑器",
+      "width": "宽度 (像素)",
+      "height": "高度 (像素)",
+      "format": "格式",
+      "convertButton": "转换为图片"
+    },
+    "preview": {
+      "title": "图片预览",
+      "initialMessage": "您转换的图片将显示在这里",
+      "loading": "转换中...",
+      "imageUrl": "图片URL：",
+      "error": "错误："
+    },
+    "backToHome": "← 返回首页"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文"
+  }
+}

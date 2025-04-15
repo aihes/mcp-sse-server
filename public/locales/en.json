@@ -1,0 +1,81 @@
+{
+  "site": {
+    "title": "HTML to Image SSE Service",
+    "copyright": "© 2023 HTML to Image Service. All rights reserved."
+  },
+  "home": {
+    "header": {
+      "title": "HTML to Image Conversion Service",
+      "subtitle": "Transform your HTML content into high-quality images with our SSE-powered service"
+    },
+    "features": {
+      "integration": {
+        "title": "Easy Integration",
+        "description": "Our service uses Server-Sent Events (SSE) for real-time communication, making it easy to integrate with your existing applications."
+      },
+      "quality": {
+        "title": "High-Quality Images",
+        "description": "Convert any HTML or SVG content into PNG, JPEG, or WebP images with customizable dimensions and quality settings."
+      },
+      "free": {
+        "title": "Free to Use",
+        "description": "Our service is currently free to use. If you find it valuable, consider supporting the project with a small donation."
+      }
+    },
+    "tryDemo": {
+      "title": "Try Our Demo",
+      "description": "Experience the HTML-to-Image conversion service with our interactive demo. Create beautiful images from your HTML content in seconds.",
+      "button": "Try the Demo",
+      "feature1": {
+        "title": "Live Preview",
+        "description": "See your HTML rendered as an image in real-time"
+      },
+      "feature2": {
+        "title": "Customizable",
+        "description": "Adjust dimensions and format to your needs"
+      },
+      "feature3": {
+        "title": "Edit HTML",
+        "description": "Modify the HTML content directly in the editor"
+      }
+    },
+    "apiInfo": {
+      "title": "API Information",
+      "description": "Use our MCP service to convert HTML to images programmatically.",
+      "mcpEndpoint": "MCP Service Endpoint:",
+      "apiDocs": "API Documentation",
+      "viewDocs": "View Documentation"
+    },
+    "support": {
+      "title": "Support This Project",
+      "description": "This service is currently free to use. If you find it valuable for your projects, please consider buying me a coffee!",
+      "supportMessage": "Your support helps keep this service running and enables future improvements.",
+      "alipay": "Alipay",
+      "wechat": "WeChat Pay"
+    }
+  },
+  "demo": {
+    "header": {
+      "title": "HTML to Image Conversion Demo"
+    },
+    "editor": {
+      "title": "HTML Editor",
+      "width": "Width (px)",
+      "height": "Height (px)",
+      "format": "Format",
+      "convertButton": "Convert to Image"
+    },
+    "preview": {
+      "title": "Image Preview",
+      "initialMessage": "Your converted image will appear here",
+      "loading": "Converting...",
+      "imageUrl": "Image URL:",
+      "error": "Error:"
+    },
+    "backToHome": "← Back to Home"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文"
+  }
+}

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="demo.header.title">HTML to Image Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="/js/i18n.js"></script>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .language-switcher select {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            padding-right: 20px;
+            appearance: none;
+            outline: none;
+        }
+
+        .language-switcher i {
+            color: white;
+            margin-right: 5px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .demo-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .editor-section {
+            flex: 1 1 500px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .preview-section {
+            flex: 1 1 500px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            resize: vertical;
+        }
+
+        .controls {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        input, select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .preview-container {
+            margin-top: 20px;
+            min-height: 300px;
+            border: 1px dashed #ddd;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .preview-container img {
+            max-width: 100%;
+            max-height: 400px;
+        }
+
+        .result-url {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            word-break: break-all;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading::after {
+            content: attr(data-loading-text);
+            display: block;
+            margin-top: 10px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--primary-color);
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .demo-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="language-switcher">
+        <i class="fas fa-globe"></i>
+        <select id="language-switcher">
+            <option value="en" data-i18n="language.en">English</option>
+            <option value="zh" data-i18n="language.zh">中文</option>
+        </select>
+    </div>
+
+    <header>
+        <div class="container">
+            <h1 data-i18n="demo.header.title">HTML to Image Conversion Demo</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="demo-container">
+            <section class="editor-section">
+                <h2 data-i18n="demo.editor.title">HTML Editor</h2>
+                <textarea id="htmlEditor"><!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #ff6b6b, #556270);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 18px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hello World!</h1>
+        <p>This HTML will be converted to an image</p>
+    </div>
+</body>
+</html></textarea>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="width" data-i18n="demo.editor.width">Width (px)</label>
+                        <input type="number" id="width" value="800" min="100" max="2000">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="height" data-i18n="demo.editor.height">Height (px)</label>
+                        <input type="number" id="height" value="400" min="100" max="2000">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="format" data-i18n="demo.editor.format">Format</label>
+                        <select id="format">
+                            <option value="png">PNG</option>
+                            <option value="jpeg">JPEG</option>
+                            <option value="webp">WebP</option>
+                        </select>
+                    </div>
+
+                    <button id="convertBtn" class="btn" data-i18n="demo.editor.convertButton">Convert to Image</button>
+                </div>
+            </section>
+
+            <section class="preview-section">
+                <h2 data-i18n="demo.preview.title">Image Preview</h2>
+
+                <div class="loading" data-loading-text="Converting...">
+                    <div class="spinner"></div>
+                </div>
+
+                <div class="preview-container">
+                    <p id="initialMessage" data-i18n="demo.preview.initialMessage">Your converted image will appear here</p>
+                    <img id="previewImage" style="display: none;">
+                </div>
+
+                <div id="resultUrl" class="result-url"></div>
+            </section>
+        </div>
+
+        <a href="/" class="back-link" data-i18n="demo.backToHome">← Back to Home</a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p data-i18n="site.copyright">&copy; 2023 HTML to Image Service. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Update loading text based on current language
+        function updateLoadingText() {
+            const loadingEl = document.querySelector('.loading');
+            if (loadingEl && window.i18n && window.i18n.initialized) {
+                loadingEl.setAttribute('data-loading-text', window.i18n.t('demo.preview.loading'));
+            }
+        }
+
+        // Listen for language changes
+        window.addEventListener('languageChanged', updateLoadingText);
+
+        // Update loading text when DOM is loaded
+        document.addEventListener('DOMContentLoaded', updateLoadingText);
+
+        // Update HTML template based on language
+        function updateHtmlTemplate() {
+            const htmlEditor = document.getElementById('htmlEditor');
+            if (htmlEditor && window.i18n && window.i18n.initialized) {
+                const lang = window.i18n.currentLanguage;
+                if (lang === 'zh') {
+                    htmlEditor.value = htmlEditor.value.replace('Hello World!', '你好，世界！');
+                    htmlEditor.value = htmlEditor.value.replace('This HTML will be converted to an image', '这个HTML将被转换为图片');
+                } else {
+                    htmlEditor.value = htmlEditor.value.replace('你好，世界！', 'Hello World!');
+                    htmlEditor.value = htmlEditor.value.replace('这个HTML将被转换为图片', 'This HTML will be converted to an image');
+                }
+            }
+        }
+
+        // Listen for language changes to update the HTML template
+        window.addEventListener('languageChanged', updateHtmlTemplate);
+        document.addEventListener('DOMContentLoaded', updateHtmlTemplate);
+
+        // No need to initialize MCP client or connect to SSE server
+        // We'll use the direct API endpoint instead
+
+        document.getElementById('convertBtn').addEventListener('click', async () => {
+            const htmlContent = document.getElementById('htmlEditor').value;
+            const width = parseInt(document.getElementById('width').value);
+            const height = parseInt(document.getElementById('height').value);
+            const format = document.getElementById('format').value;
+
+            // Show loading indicator
+            document.querySelector('.loading').style.display = 'block';
+            document.getElementById('initialMessage').style.display = 'none';
+            document.getElementById('previewImage').style.display = 'none';
+            document.getElementById('resultUrl').style.display = 'none';
+
+            try {
+                // Call the direct API endpoint
+                const response = await fetch('/api/html-to-image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        htmlContent,
+                        width,
+                        height,
+                        format
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (result.success && result.imageUrl) {
+                    const imageUrl = result.imageUrl;
+
+                    // Display the image
+                    const previewImage = document.getElementById('previewImage');
+                    previewImage.src = imageUrl;
+                    previewImage.style.display = 'block';
+
+                    // Display the URL
+                    const resultUrl = document.getElementById('resultUrl');
+                    const imageUrlLabel = window.i18n.t('demo.preview.imageUrl');
+                    resultUrl.textContent = `${imageUrlLabel} ${imageUrl}`;
+                    resultUrl.style.display = 'block';
+                } else {
+                    throw new Error('Could not extract image URL from response');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                const errorLabel = window.i18n.t('demo.preview.error');
+                document.getElementById('initialMessage').textContent = `${errorLabel} ${error.message}`;
+                document.getElementById('initialMessage').style.display = 'block';
+            } finally {
+                // Hide loading indicator
+                document.querySelector('.loading').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

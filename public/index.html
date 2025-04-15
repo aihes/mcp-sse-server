@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="site.title">HTML to Image SSE Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="/js/i18n.js"></script>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .language-switcher select {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            padding-right: 20px;
+            appearance: none;
+            outline: none;
+        }
+
+        .language-switcher i {
+            color: white;
+            margin-right: 5px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            flex: 1 1 300px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .demo-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: var(--card-shadow);
+        }
+
+        .demo-section h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .demo-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .demo-feature {
+            flex: 1 1 250px;
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .demo-feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .demo-feature i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .demo-feature h3 {
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+
+        .demo-feature p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .api-info-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: var(--card-shadow);
+        }
+
+        .api-endpoint, .api-docs {
+            margin: 25px 0;
+        }
+
+        .endpoint-url {
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            padding: 12px 15px;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 10px 0;
+            word-break: break-all;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .support-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .support-section h2 {
+            color: var(--primary-color);
+        }
+
+        .qr-code {
+            max-width: 180px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-option {
+            text-align: center;
+        }
+
+        .payment-option p {
+            margin-top: 10px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .features {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="language-switcher">
+        <i class="fas fa-globe"></i>
+        <select id="language-switcher">
+            <option value="en" data-i18n="language.en">English</option>
+            <option value="zh" data-i18n="language.zh" selected>中文</option>
+        </select>
+    </div>
+
+    <header>
+        <div class="container">
+            <h1 data-i18n="home.header.title">HTML to Image Conversion Service</h1>
+            <p data-i18n="home.header.subtitle">Transform your HTML content into high-quality images with our SSE-powered service</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="features">
+            <div class="feature-card">
+                <h3 data-i18n="home.features.integration.title">Easy Integration</h3>
+                <p data-i18n="home.features.integration.description">Our service uses Server-Sent Events (SSE) for real-time communication, making it easy to integrate with your existing applications.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3 data-i18n="home.features.quality.title">High-Quality Images</h3>
+                <p data-i18n="home.features.quality.description">Convert any HTML or SVG content into PNG, JPEG, or WebP images with customizable dimensions and quality settings.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3 data-i18n="home.features.free.title">Free to Use</h3>
+                <p data-i18n="home.features.free.description">Our service is currently free to use. If you find it valuable, consider supporting the project with a small donation.</p>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2 data-i18n="home.tryDemo.title">Try Our Demo</h2>
+            <p data-i18n="home.tryDemo.description">Experience the HTML-to-Image conversion service with our interactive demo. Create beautiful images from your HTML content in seconds.</p>
+
+            <div class="demo-features">
+                <div class="demo-feature">
+                    <i class="fas fa-paint-brush"></i>
+                    <h3 data-i18n="home.tryDemo.feature1.title">Live Preview</h3>
+                    <p data-i18n="home.tryDemo.feature1.description">See your HTML rendered as an image in real-time</p>
+                </div>
+
+                <div class="demo-feature">
+                    <i class="fas fa-sliders-h"></i>
+                    <h3 data-i18n="home.tryDemo.feature2.title">Customizable</h3>
+                    <p data-i18n="home.tryDemo.feature2.description">Adjust dimensions and format to your needs</p>
+                </div>
+
+                <div class="demo-feature">
+                    <i class="fas fa-code"></i>
+                    <h3 data-i18n="home.tryDemo.feature3.title">Edit HTML</h3>
+                    <p data-i18n="home.tryDemo.feature3.description">Modify the HTML content directly in the editor</p>
+                </div>
+            </div>
+
+            <a href="/demo.html" class="btn" data-i18n="home.tryDemo.button">Try the Demo</a>
+        </section>
+
+        <section class="api-info-section">
+            <h2 data-i18n="home.apiInfo.title">API Information</h2>
+            <p data-i18n="home.apiInfo.description">Use our MCP service to convert HTML to images programmatically.</p>
+
+            <div class="api-endpoint">
+                <h3 data-i18n="home.apiInfo.mcpEndpoint">MCP Service Endpoint:</h3>
+                <div class="endpoint-url" id="mcp-endpoint-url">Loading...</div>
+            </div>
+
+            <div class="api-docs">
+                <h3 data-i18n="home.apiInfo.apiDocs">API Documentation</h3>
+                <p>Learn how to integrate with our service using the MCP protocol or direct API calls.</p>
+                <a href="https://github.com/aihes/mcp-sse-server" class="btn" data-i18n="home.apiInfo.viewDocs">View Documentation</a>
+            </div>
+        </section>
+
+        <section class="support-section">
+            <h2 data-i18n="home.support.title">Support This Project</h2>
+            <p data-i18n="home.support.description">This service is currently free to use. If you find it valuable for your projects, please consider buying me a coffee!</p>
+
+            <div style="display: flex; justify-content: center; gap: 30px; margin: 30px 0;">
+                <div class="payment-option">
+                    <img src="/images/payment_alipay.png" alt="Alipay QR Code" class="qr-code">
+                    <p data-i18n="home.support.alipay">支付宝</p>
+                </div>
+                <!-- <div class="payment-option">
+                    <img src="/images/payment_wechat.png" alt="WeChat Pay QR Code" class="qr-code">
+                    <p data-i18n="home.support.wechat">微信支付</p>
+                </div> -->
+            </div>
+
+            <p data-i18n="home.support.supportMessage">Your support helps keep this service running and enables future improvements.</p>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p data-i18n="site.copyright">&copy; 2023 HTML to Image Service. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Set default language to Chinese
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default language to Chinese
+            const languageSwitcher = document.getElementById('language-switcher');
+            if (languageSwitcher) {
+                languageSwitcher.value = 'zh';
+                // Trigger the change event to apply translations
+                const event = new Event('change');
+                languageSwitcher.dispatchEvent(event);
+            }
+        });
+
+        // Fetch server configuration and update MCP endpoint URL
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // Fetch server configuration
+                const response = await fetch('/api/config');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch server configuration');
+                }
+
+                const config = await response.json();
+
+                // Update MCP endpoint URL
+                const mcpEndpointUrl = document.getElementById('mcp-endpoint-url');
+                if (mcpEndpointUrl) {
+                    const host = config.server?.host || window.location.hostname;
+                    const port = config.server?.port || window.location.port;
+                    const endpoint = config.mcp?.endpoint || '/mcp';
+
+                    // Construct the full URL
+                    const fullUrl = `http://${host}${port ? ':' + port : ''}${endpoint}`;
+                    mcpEndpointUrl.textContent = fullUrl;
+                }
+            } catch (error) {
+                console.error('Error fetching server configuration:', error);
+
+                // Fallback to using current location
+                const mcpEndpointUrl = document.getElementById('mcp-endpoint-url');
+                if (mcpEndpointUrl) {
+                    const host = window.location.hostname;
+                    const port = window.location.port;
+
+                    // Construct the full URL
+                    const fullUrl = `http://${host}${port ? ':' + port : ''}/mcp`;
+                    mcpEndpointUrl.textContent = fullUrl;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
