@@ -1,168 +1,79 @@
-# HTML to Image MCP Service
+# HTML to Image Service
 
-This repository contains a complete implementation of an HTML-to-Image conversion service using the Model Context Protocol (MCP) with Server-Sent Events (SSE) as the transport layer.
+一个简单易用的 HTML 转图片服务，可以将任何 HTML 或 SVG 内容转换为高质量图片。
 
-## Overview
+## 快速开始
 
-This service allows you to convert HTML or SVG content into high-quality images (PNG, JPEG, or WebP) using Puppeteer for rendering. The service is built on the Model Context Protocol (MCP), which is a communication protocol designed for AI systems, and uses Server-Sent Events (SSE) as the transport layer for real-time communication with clients.
+访问我们的在线服务：
 
-## Features
+```
+https://mcpdev.xyz/
+```
 
-- **HTML to Image Conversion**: Convert any HTML or SVG content to PNG, JPEG, or WebP images
-- **Customizable Dimensions**: Specify width and height for your images or let the service auto-adjust
-- **Multilingual Support**: Interface available in English and Chinese
-- **Interactive Demo**: Try the service directly from your browser
-- **MCP Protocol**: Built on the Model Context Protocol for standardized AI system communication
-- **SSE Transport**: Uses Server-Sent Events as the transport layer for real-time communication
-- **Debugging Support**: Includes detailed logging and debugging configurations
+## 主要功能
 
-## Project Structure
+- **HTML 转图片**：将 HTML 或 SVG 内容转换为 PNG、JPEG 或 WebP 图片
+- **自定义尺寸**：指定图片宽度和高度，或让服务自动调整
+- **多语言支持**：支持中文和英文界面
+- **在线演示**：直接在浏览器中试用服务
 
-### Core Files
-- `server-integrated.js` - The main integrated server with HTML-to-Image functionality
-- `config.js` - Configuration file for server settings and endpoints
-- `index.html` - Main entry point for the application
+## 如何使用
 
-### Public Directory
-- `public/index.html` - The homepage with service information and donation options
-- `public/demo.html` - Interactive demo for trying the HTML-to-Image conversion
-- `public/locales/` - Language files for multilingual support (en.json, zh.json)
-- `public/js/i18n.js` - JavaScript for handling internationalization
-- `public/js/mcp-client.js` - Client-side MCP implementation
-- `public/images/` - Directory for storing generated images
-
-### Utils Directory
-- `utils/mcp-client-example.js` - Example MCP client implementation for HTML-to-Image conversion
-- `utils/server.js` - A basic MCP server using StdioServerTransport (for reference)
-- `utils/sse-server.js` - The original SSE server implementation (for reference)
-- `utils/client.js` - A client for the basic server (for reference)
-- `utils/sse-client.js` - SSE client implementation (for reference)
-- `utils/test-sse.js` - Test script for SSE functionality
-- `utils/simple-test.js` - Simple test server
-
-## Getting Started
-
-1. Install dependencies:
-   ```bash
-   npm install
+1. 访问在线演示页面：
+   ```
+   https://mcpdev.xyz/demo.html
    ```
 
-2. Start the integrated server:
-   ```bash
-   npm start
-   ```
+2. 在编辑器中输入您的 HTML 代码
 
-   Or use the development mode with environment variables:
-   ```bash
-   npm run dev
-   ```
+3. 设置图片尺寸和格式
 
-3. Open your browser and navigate to:
-   ```
-   http://localhost:3006/
-   ```
+4. 点击“转换为图片”按钮
 
-4. Try the demo at:
-   ```
-   http://localhost:3006/demo.html
-   ```
+5. 查看并下载生成的图片
 
-5. Run the MCP client example:
-   ```bash
-   npm run mcp-client
-   ```
+## MCP 服务
 
-   This example demonstrates how to use the direct API endpoint to convert HTML to images. It also includes commented code showing how to use the MCP protocol (though this is currently disabled due to compatibility issues).
+MCP 服务入口：
+```
+https://mcpdev.xyz/mcp
+```
 
-## HTML-to-Image API
 
-The service provides a tool for converting HTML to images:
+您可以使用 MCP 客户端连接到此服务，将 HTML 转换为图片。
+
+## API 使用示例
 
 ```javascript
-// Example API call to convert HTML to image
-const response = await fetch('/messages?sessionId=your-session-id', {
+// 示例：将 HTML 转换为图片
+const response = await fetch('https://mcpdev.xyz/api/html-to-image', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    type: 'tool',
-    name: 'htmlToImage',
-    arguments: {
-      htmlContent: '<div style="background: linear-gradient(to right, #ff6b6b, #556270); padding: 20px; color: white; font-family: Arial;"><h1>Hello World!</h1><p>This HTML will be converted to an image</p></div>',
-      width: 800,
-      height: 400,
-      format: 'png'
-    }
+    htmlContent: '<div style="background: linear-gradient(to right, #ff6b6b, #556270); padding: 20px; color: white; font-family: Arial;"><h1>你好，世界！</h1><p>这段 HTML 将被转换为图片</p></div>',
+    width: 800,
+    height: 400,
+    format: 'png'
   })
 });
 
-// The response will contain a URL to the generated image
+const result = await response.json();
+// result.imageUrl 包含生成图片的 URL
 ```
 
-### Parameters
+## 参数说明
 
-- `htmlContent` (string, required): The HTML or SVG content to convert to an image
-- `width` (number, optional): Width of the image in pixels
-- `height` (number, optional): Height of the image in pixels
-- `format` (string, optional): Image format - "png", "jpeg", or "webp" (default: "png")
+- `htmlContent`：要转换的 HTML 或 SVG 内容（必填）
+- `width`：图片宽度，单位为像素（可选）
+- `height`：图片高度，单位为像素（可选）
+- `format`：图片格式，支持 'png'、'jpeg' 或 'webp'（默认为 'png'）
 
-## Multilingual Support
+## 支持本项目
 
-The service interface is available in:
-- English
-- Chinese (中文)
+如果您觉得这个服务对您有帮助，欢迎通过主页上的二维码进行捐赠，请我喝杯咖啡！
 
-Language files are located in the `public/locales/` directory and can be easily extended to support additional languages.
-
-## API Endpoints
-
-The service provides the following API endpoints:
-
-### Direct API
-
-- `POST /api/html-to-image` - Convert HTML to an image
-  - Parameters:
-    - `htmlContent` (required): The HTML content to convert
-    - `width` (optional): Image width in pixels
-    - `height` (optional): Image height in pixels
-    - `format` (optional): 'png', 'jpeg', or 'webp' (default: 'png')
-
-### MCP Endpoint
-
-- `GET /mcp` - The MCP endpoint for establishing SSE connections
-  - This is the endpoint you connect to with an MCP client
-  - Example: `const serverUrl = new URL("http://localhost:3006/mcp");`
-
-### MCP Resources
-
-- Documentation resource: `docs://{topic}` - Access documentation on specific topics
-  - Available topics: overview, api, examples
-- Welcome prompt: `welcome` - Provides a friendly welcome message
-
-## Support the Project
-
-This service is free to use. If you find it valuable for your projects, please consider supporting the development by making a donation via the QR code on the homepage.
-
-## Configuration
-
-The service can be configured using the `config.js` file or environment variables:
-
-### Configuration File
-
-The `config.js` file contains settings for:
-- Server host and port
-- MCP endpoint paths
-- Image service settings
-
-### Environment Variables
-
-- `PORT`: The port on which the server will run (default: 3006)
-- `HOST`: The hostname for the server (default: localhost)
-- `IMAGE_DOMAIN_PREFIX`: The domain prefix for generated image URLs (default: http://localhost:PORT)
-
-You can create a `.env` file in the root directory to set these variables.
-
-## License
+## 许可证
 
 MIT
